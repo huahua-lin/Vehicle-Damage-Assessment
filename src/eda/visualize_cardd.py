@@ -1,5 +1,7 @@
 """Visualise one annotated CarDD image for each damage class."""
 
+from __future__ import annotations
+
 import argparse
 import json
 from pathlib import Path
@@ -22,7 +24,7 @@ DAMAGE_COLOURS = {
 }
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     """Parse dataset, output and display options."""
     parser = argparse.ArgumentParser(description="Visualise CarDD annotations")
     parser.add_argument("--dataset-root", type=Path, default=DEFAULT_DATASET)
@@ -31,7 +33,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def main():
+def main() -> None:
     """Create and save the six-class annotation figure."""
     args = parse_args()
     dataset_root = args.dataset_root.expanduser().resolve()

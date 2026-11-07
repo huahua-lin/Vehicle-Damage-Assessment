@@ -1,10 +1,13 @@
 """Basic validation and statistics for the CarDD COCO dataset."""
 
+from __future__ import annotations
+
 import argparse
 import json
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
+from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DATASET = PROJECT_ROOT / "CarDD_release" / "CarDD_COCO"
@@ -12,14 +15,14 @@ DEFAULT_REPORT = PROJECT_ROOT / "reports" / "cardd_audit.json"
 SPLITS = ("train", "val", "test")
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Audit the CarDD dataset")
     parser.add_argument("--dataset-root", type=Path, default=DEFAULT_DATASET)
     parser.add_argument("--output", type=Path, default=DEFAULT_REPORT)
     return parser.parse_args()
 
 
-def load_annotations(path, errors):
+def load_annotations(path: Path, errors: list[str]) -> dict[str, Any] | None:
     """Load a COCO annotation file and record any structural errors."""
     if not path.exists():
         errors.append(f"Missing annotation file: {path}")
@@ -40,7 +43,7 @@ def load_annotations(path, errors):
     return data
 
 
-def bbox_is_valid(bbox):
+def bbox_is_valid(bbox: object) -> bool:
     """Return whether a bounding box has valid COCO coordinates."""
     return (
         isinstance(bbox, list)
@@ -53,14 +56,14 @@ def bbox_is_valid(bbox):
     )
 
 
-def segmentation_is_valid(segmentation):
+def segmentation_is_valid(segmentation: object) -> bool:
     """Return whether a segmentation contains valid polygon shapes."""
     if not isinstance(segmentation, list) or not segmentation:
         return False
     return all(isinstance(polygon, list) and len(polygon) >= 6 and len(polygon) % 2 == 0 for polygon in segmentation)
 
 
-def audit_dataset(dataset_root):
+def audit_dataset(dataset_root: Path) -> dict[str, Any]:
     """Validate all dataset splits and return summary statistics."""
     dataset_root = dataset_root.expanduser().resolve()
     errors = []
@@ -171,7 +174,7 @@ def audit_dataset(dataset_root):
     }
 
 
-def print_report(report):
+def print_report(report: dict[str, Any]) -> None:
     """Print the main dataset statistics and validation result."""
     print(f"Dataset: {report['dataset_root']}")
     print(f"Categories: {', '.join(report['categories'].values())}\n")
@@ -193,7 +196,7 @@ def print_report(report):
         print(f"  - {error}")
 
 
-def save_report(report, output_path):
+def save_report(report: dict[str, Any], output_path: Path) -> None:
     """Save the audit results as a JSON report."""
     output_path = output_path.expanduser().resolve()
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -203,7 +206,7 @@ def save_report(report, output_path):
     print(f"\nJSON report: {output_path}")
 
 
-def main():
+def main() -> int:
     args = parse_args()
     report = audit_dataset(args.dataset_root)
     print_report(report)
