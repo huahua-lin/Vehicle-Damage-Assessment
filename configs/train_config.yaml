@@ -1,0 +1,40 @@
+experiment:
+  exp_dir: logs/mask_rcnn
+
+data:
+  dataset_root: CarDD_release/CarDD_COCO
+  batch_size: 4
+  num_workers: 4
+
+model:
+  name: Mask R-CNN ResNet50-FPN v2
+  num_classes: 7
+  pretrained: true
+
+training:
+  epochs: 20
+  mixed_precision: true
+  seed: 42
+
+optimizer:
+  name: SGD
+  learning_rate: 0.005
+  momentum: 0.9
+  weight_decay: 0.0005
+
+scheduler:
+  name: StepLR
+  step_size: 12
+  gamma: 0.1
+
+augmentation:
+  color_jitter: 0.15
+  color_jitter_probability: 0.8
+  blur_probability: 0.15
+  blur_sigma: [0.1, 0.8]
+  noise_probability: 0.15
+  noise_sigma: 0.01
+  affine_probability: 0.5
+  rotation_degrees: 5
+  scale: [0.8, 1.2]
+  flip_probability: 0.5
