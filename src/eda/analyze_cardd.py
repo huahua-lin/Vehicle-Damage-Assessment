@@ -166,11 +166,7 @@ def audit_dataset(dataset_root: Path) -> dict[str, Any]:
             "annotations": sum(split["annotations"] for split in split_reports.values()),
             "class_counts": dict(sorted(total_class_counts.items())),
         },
-        "validation": {
-            "passed": not errors,
-            "error_count": len(errors),
-            "errors": errors,
-        },
+        "validation": {"passed": not errors, "error_count": len(errors), "errors": errors},
     }
 
 

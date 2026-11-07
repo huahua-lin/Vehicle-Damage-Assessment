@@ -64,16 +64,7 @@ def main() -> None:
             axis.add_patch(Polygon(polygon, facecolor=colour, edgecolor=colour, alpha=0.4))
 
         x, y, width, height = annotation["bbox"]
-        axis.add_patch(
-            Rectangle(
-                (x, y),
-                width,
-                height,
-                fill=False,
-                edgecolor=colour,
-                linewidth=2.5,
-            )
-        )
+        axis.add_patch(Rectangle((x, y), width, height, fill=False, edgecolor=colour, linewidth=2.5))
         axis.set_title(class_name, color=colour, fontweight="bold")
         axis.axis("off")
 
